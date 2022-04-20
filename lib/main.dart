@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:foodhub/helpers/custom_route.dart';
 import 'package:foodhub/provider/auth.dart';
 import 'package:foodhub/provider/cart.dart';
@@ -19,6 +21,9 @@ import 'screens/food_detail_screen.dart';
 import 'provider/foods.dart';
 
 void main() async {
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.deepOrange, // status bar color
+  ));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const FoodHub());

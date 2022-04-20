@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodhub/models/http_exception.dart';
 import 'package:foodhub/provider/auth.dart';
 import 'package:provider/provider.dart';
+import '../../models/http_exception.dart';
 
 import './signup_screen.dart';
 
@@ -90,59 +91,166 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: 200,
-              decoration: const BoxDecoration(
-                borderRadius:
-                    BorderRadius.only(bottomLeft: Radius.circular(90)),
-                color: Color(0xffF5591F),
-                gradient: LinearGradient(
-                  colors: [(Color(0xffF5591F)), Color(0xffF2861E)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-              child: Center(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 50),
-                    child: const CircleAvatar(
-                      radius: 50.0,
-                      backgroundImage: AssetImage("assets/images/logo.jpg"),
+    return SafeArea(
+      child: Scaffold(
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  height: 200,
+                  decoration: const BoxDecoration(
+                    borderRadius:
+                        BorderRadius.only(bottomLeft: Radius.circular(90)),
+                    color: Color(0xffF5591F),
+                    gradient: LinearGradient(
+                      colors: [(Color(0xffF5591F)), Color(0xffF2861E)],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 40, top: 0),
-                    alignment: Alignment.bottomRight,
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                  child: Center(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 50),
+                        child: const CircleAvatar(
+                          radius: 50.0,
+                          backgroundImage: AssetImage("assets/images/logo.jpg"),
+                        ),
                       ),
-                    ),
-                  )
-                ],
-              )),
-            ),
-            Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Container(
+                      Container(
+                        margin: const EdgeInsets.only(right: 40, top: 0),
+                        alignment: Alignment.bottomRight,
+                        child: const Text(
+                          "Login",
+                          style: TextStyle(
+                            fontSize: 30,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    ],
+                  )),
+                ),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Container(
+                        margin:
+                            const EdgeInsets.only(left: 20, right: 20, top: 70),
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        height: 65,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: Colors.grey[200],
+                          boxShadow: const [
+                            BoxShadow(
+                                offset: Offset(0, 10),
+                                blurRadius: 50,
+                                color: Color(0xffEEEEEE)),
+                          ],
+                        ),
+                        child: Center(
+                          child: TextFormField(
+                            cursorColor: const Color(0xffF5591F),
+                            decoration: const InputDecoration(
+                              icon: Icon(
+                                Icons.email,
+                                color: Color(0xffF5591F),
+                              ),
+                              hintText: "Enter Email",
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                            ),
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (value) {
+                              if (value!.isEmpty ||
+                                  !value.endsWith('@heraldcollege.edu.np')) {
+                                return 'must ends with :@heraldcollege.edu.np';
+                              } else {
+                                return null;
+                              }
+                            },
+                            onSaved: (value) {
+                              _authData['email'] = value!;
+                            },
+                          ),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        margin:
+                            const EdgeInsets.only(left: 20, right: 20, top: 20),
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        height: 65,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: const Color(0xffEEEEEE),
+                          boxShadow: const [
+                            BoxShadow(
+                                offset: Offset(0, 20),
+                                blurRadius: 100,
+                                color: Color(0xffEEEEEE)),
+                          ],
+                        ),
+                        child: Center(
+                          child: TextFormField(
+                            obscureText: true,
+                            cursorColor: const Color(0xffF5591F),
+                            controller: _passwordController,
+                            decoration: const InputDecoration(
+                              focusColor: Color(0xffF5591F),
+                              icon: Icon(
+                                Icons.vpn_key,
+                                color: Color(0xffF5591F),
+                              ),
+                              hintText: "Enter Password",
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'required field';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              _authData['password'] = value!;
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Container(
+                //   margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                //   alignment: Alignment.centerRight,
+                //   child: GestureDetector(
+                //     onTap: () {
+                //       // Write Click Listener Code Here
+                //     },
+                //     child: const Text("Forget Password?"),
+                //   ),
+                // ),
+                GestureDetector(
+                  onTap: _submit,
+                  child: Container(
                     alignment: Alignment.center,
-                    margin: const EdgeInsets.only(left: 20, right: 20, top: 70),
+                    margin: const EdgeInsets.only(left: 20, right: 20, top: 25),
                     padding: const EdgeInsets.only(left: 20, right: 20),
-                    height: 65,
+                    height: 54,
                     decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                          colors: [(Color(0xffF5591F)), Color(0xffF2861E)],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight),
                       borderRadius: BorderRadius.circular(50),
                       color: Colors.grey[200],
                       boxShadow: const [
@@ -152,142 +260,43 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: Color(0xffEEEEEE)),
                       ],
                     ),
-                    child: Center(
-                      child: TextFormField(
-                        cursorColor: const Color(0xffF5591F),
-                        decoration: const InputDecoration(
-                          icon: Icon(
-                            Icons.email,
-                            color: Color(0xffF5591F),
+                    child: _isLoading
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : const Text(
+                            "LOGIN",
+                            style: TextStyle(color: Colors.white),
                           ),
-                          hintText: "Enter Email",
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value!.isEmpty ||
-                              !value.endsWith('@heraldcollege.edu.np')) {
-                            return 'must ends with :@heraldcollege.edu.np';
-                          } else {
-                            return null;
-                          }
-                        },
-                        onSaved: (value) {
-                          _authData['email'] = value!;
-                        },
-                      ),
-                    ),
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    height: 65,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: const Color(0xffEEEEEE),
-                      boxShadow: const [
-                        BoxShadow(
-                            offset: Offset(0, 20),
-                            blurRadius: 100,
-                            color: Color(0xffEEEEEE)),
-                      ],
-                    ),
-                    child: Center(
-                      child: TextFormField(
-                        obscureText: true,
-                        cursorColor: const Color(0xffF5591F),
-                        controller: _passwordController,
-                        decoration: const InputDecoration(
-                          focusColor: Color(0xffF5591F),
-                          icon: Icon(
-                            Icons.vpn_key,
-                            color: Color(0xffF5591F),
-                          ),
-                          hintText: "Enter Password",
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'required field';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          _authData['password'] = value!;
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Container(
-            //   margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-            //   alignment: Alignment.centerRight,
-            //   child: GestureDetector(
-            //     onTap: () {
-            //       // Write Click Listener Code Here
-            //     },
-            //     child: const Text("Forget Password?"),
-            //   ),
-            // ),
-            GestureDetector(
-              onTap: _submit,
-              child: Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.only(left: 20, right: 20, top: 25),
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                height: 54,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                      colors: [(Color(0xffF5591F)), Color(0xffF2861E)],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight),
-                  borderRadius: BorderRadius.circular(50),
-                  color: Colors.grey[200],
-                  boxShadow: const [
-                    BoxShadow(
-                        offset: Offset(0, 10),
-                        blurRadius: 50,
-                        color: Color(0xffEEEEEE)),
-                  ],
                 ),
-                child: _isLoading
-                    ? const CircularProgressIndicator()
-                    : const Text(
-                        "LOGIN",
-                        style: TextStyle(color: Colors.white),
-                      ),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Don't Have Any Account?  "),
-                  GestureDetector(
-                    child: const Text(
-                      "Register Now",
-                      style: TextStyle(color: Color(0xffF5591F)),
-                    ),
-                    onTap: () {
-                      // Write Tap Code Here.
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SignUpScreen(),
+                Container(
+                  margin: const EdgeInsets.only(top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Don't Have Any Account?  "),
+                      GestureDetector(
+                        child: const Text(
+                          "Register Now",
+                          style: TextStyle(color: Color(0xffF5591F)),
                         ),
-                      );
-                    },
-                  )
-                ],
-              ),
-            )
-          ],
+                        onTap: () {
+                          // Write Tap Code Here.
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SignUpScreen(),
+                            ),
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );

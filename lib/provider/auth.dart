@@ -76,11 +76,11 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> signup(String email, String password) async {
-   await _authenticate(email, password, 'signUp');
+    return _authenticate(email, password, 'signUp');
   }
 
   Future<void> login(String email, String password) async {
-    _authenticate(email, password, 'signInWithPassword');
+    return _authenticate(email, password, 'signInWithPassword');
   }
 
   Future<bool> tryAutoLogin() async {
@@ -88,12 +88,6 @@ class Auth with ChangeNotifier {
     if (!prefs.containsKey('userData')) {
       return false;
     }
-    // try {
-    //   final extractedUserData =
-    //       json.decode(prefs.getString('userData')!) as Map<String, Object>;
-    // } catch (error) {
-    //   print('error on getting data');
-    // }
 
     final extractedUserData = json.decode(prefs.getString('userData')!);
 
@@ -122,7 +116,6 @@ class Auth with ChangeNotifier {
     }
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
-    // prefs.remove('userData');
     prefs.clear(); // clears all data stored
   }
 

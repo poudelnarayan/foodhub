@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodhub/models/http_exception.dart';
 import 'package:foodhub/provider/auth.dart';
 import 'package:provider/provider.dart';
+import '../../models/http_exception.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -83,264 +84,272 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: 190,
-              decoration: const BoxDecoration(
-                borderRadius:
-                    BorderRadius.only(bottomLeft: Radius.circular(90)),
-                color: Color(0xffF5591F),
-                gradient: LinearGradient(
-                  colors: [(Color(0xffF5591F)), Color(0xffF2861E)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 40),
-                      child: const CircleAvatar(
-                        radius: 50.0,
-                        backgroundImage: AssetImage("assets/images/logo.jpg"),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(right: 40, top: 0),
-                      alignment: Alignment.bottomRight,
-                      child: const Text(
-                        "Register",
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      margin:
-                          const EdgeInsets.only(left: 20, right: 20, top: 30),
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      height: 65,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.grey[200],
-                        boxShadow: const [
-                          BoxShadow(
-                              offset: Offset(0, 10),
-                              blurRadius: 50,
-                              color: Color(0xffEEEEEE)),
-                        ],
-                      ),
-                      child: TextFormField(
-                        cursorColor: const Color(0xffF5591F),
-                        decoration: const InputDecoration(
-                          icon: Icon(
-                            Icons.person,
-                            color: Color(0xffF5591F),
-                          ),
-                          hintText: "Full Name",
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                        controller: _nameController,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'required field';
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      margin:
-                          const EdgeInsets.only(left: 20, right: 20, top: 15),
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      height: 65,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.grey[200],
-                        boxShadow: const [
-                          BoxShadow(
-                            offset: Offset(0, 10),
-                            blurRadius: 50,
-                            color: Color(0xffEEEEEE),
-                          ),
-                        ],
-                      ),
-                      child: TextFormField(
-                        cursorColor: const Color(0xffF5591F),
-                        decoration: const InputDecoration(
-                          icon: Icon(
-                            Icons.email,
-                            color: Color(0xffF5591F),
-                          ),
-                          hintText: "Email",
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value!.isEmpty ||
-                              !value.endsWith('@heraldcollege.edu.np')) {
-                            return 'must ends with :@heraldcollege.edu.np';
-                          } else {
-                            return null;
-                          }
-                        },
-                        onSaved: (value) {
-                          _authData['email'] = value!;
-                        },
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      margin:
-                          const EdgeInsets.only(left: 20, right: 20, top: 15),
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      height: 65,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: const Color(0xffEEEEEE),
-                        boxShadow: const [
-                          BoxShadow(
-                              offset: Offset(0, 20),
-                              blurRadius: 100,
-                              color: Color(0xffEEEEEE)),
-                        ],
-                      ),
-                      child: TextFormField(
-                        obscureText: true,
-                        cursorColor: const Color(0xffF5591F),
-                        controller: _passwordController,
-                        decoration: const InputDecoration(
-                          focusColor: Color(0xffF5591F),
-                          icon: Icon(
-                            Icons.vpn_key,
-                            color: Color(0xffF5591F),
-                          ),
-                          hintText: "Enter Password",
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty || value.length < 5) {
-                            return 'Password is too short!';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          _authData['password'] = value!;
-                        },
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      margin:
-                          const EdgeInsets.only(left: 20, right: 20, top: 15),
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      height: 65,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: const Color(0xffEEEEEE),
-                        boxShadow: const [
-                          BoxShadow(
-                              offset: Offset(0, 20),
-                              blurRadius: 100,
-                              color: Color(0xffEEEEEE)),
-                        ],
-                      ),
-                      child: TextFormField(
-                          obscureText: true,
-                          cursorColor: const Color(0xffF5591F),
-                          decoration: const InputDecoration(
-                            focusColor: Color(0xffF5591F),
-                            icon: Icon(
-                              Icons.vpn_key,
-                              color: Color(0xffF5591F),
-                            ),
-                            hintText: "Enter Password Again",
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                          ),
-                          validator: (value) {
-                            if (value != _passwordController.text) {
-                              return 'Passwords do not match!';
-                            }
-                            if (value!.isEmpty) {
-                              return 'required field';
-                            }
-                            return null;
-                          }),
-                    ),
-                  ],
-                )),
-            GestureDetector(
-              onTap: _submit,
-              child: Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.only(left: 20, right: 20, top: 15),
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                height: 54,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
+    return SafeArea(
+      child: Scaffold(
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  height: 200,
+                  decoration: const BoxDecoration(
+                    borderRadius:
+                        BorderRadius.only(bottomLeft: Radius.circular(90)),
+                    color: Color(0xffF5591F),
+                    gradient: LinearGradient(
                       colors: [(Color(0xffF5591F)), Color(0xffF2861E)],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight),
-                  borderRadius: BorderRadius.circular(50),
-                  color: Colors.grey[200],
-                  boxShadow: const [
-                    BoxShadow(
-                      offset: Offset(0, 10),
-                      blurRadius: 50,
-                      color: Color(0xffEEEEEE),
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
                     ),
-                  ],
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(top: 40),
+                          child: const CircleAvatar(
+                            radius: 50.0,
+                            backgroundImage:
+                                AssetImage("assets/images/logo.jpg"),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(right: 40, top: 0),
+                          alignment: Alignment.bottomRight,
+                          child: const Text(
+                            "Register",
+                            style: TextStyle(
+                              fontSize: 30,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
-                child: _isLoading
-                    ? const CircularProgressIndicator()
-                    : const Text(
-                        "REGISTER",
-                        style: TextStyle(color: Colors.white),
-                      ),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 10, bottom: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Already a Member?  "),
-                  GestureDetector(
-                    child: const Text(
-                      "Login Now",
-                      style: TextStyle(color: Color(0xffF5591F)),
+                Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          margin: const EdgeInsets.only(
+                              left: 20, right: 20, top: 30),
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          height: 65,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Colors.grey[200],
+                            boxShadow: const [
+                              BoxShadow(
+                                  offset: Offset(0, 10),
+                                  blurRadius: 50,
+                                  color: Color(0xffEEEEEE)),
+                            ],
+                          ),
+                          child: TextFormField(
+                            cursorColor: const Color(0xffF5591F),
+                            decoration: const InputDecoration(
+                              icon: Icon(
+                                Icons.person,
+                                color: Color(0xffF5591F),
+                              ),
+                              hintText: "Full Name",
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                            ),
+                            controller: _nameController,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'required field';
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          margin: const EdgeInsets.only(
+                              left: 20, right: 20, top: 15),
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          height: 65,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Colors.grey[200],
+                            boxShadow: const [
+                              BoxShadow(
+                                offset: Offset(0, 10),
+                                blurRadius: 50,
+                                color: Color(0xffEEEEEE),
+                              ),
+                            ],
+                          ),
+                          child: TextFormField(
+                            cursorColor: const Color(0xffF5591F),
+                            decoration: const InputDecoration(
+                              icon: Icon(
+                                Icons.email,
+                                color: Color(0xffF5591F),
+                              ),
+                              hintText: "Email",
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                            ),
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (value) {
+                              if (value!.isEmpty ||
+                                  !value.endsWith('@heraldcollege.edu.np')) {
+                                return 'must ends with :@heraldcollege.edu.np';
+                              } else {
+                                return null;
+                              }
+                            },
+                            onSaved: (value) {
+                              _authData['email'] = value!;
+                            },
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          margin: const EdgeInsets.only(
+                              left: 20, right: 20, top: 15),
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          height: 65,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: const Color(0xffEEEEEE),
+                            boxShadow: const [
+                              BoxShadow(
+                                  offset: Offset(0, 20),
+                                  blurRadius: 100,
+                                  color: Color(0xffEEEEEE)),
+                            ],
+                          ),
+                          child: TextFormField(
+                            obscureText: true,
+                            cursorColor: const Color(0xffF5591F),
+                            controller: _passwordController,
+                            decoration: const InputDecoration(
+                              focusColor: Color(0xffF5591F),
+                              icon: Icon(
+                                Icons.vpn_key,
+                                color: Color(0xffF5591F),
+                              ),
+                              hintText: "Enter Password",
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty || value.length < 5) {
+                                return 'Password is too short!';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              _authData['password'] = value!;
+                            },
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          margin: const EdgeInsets.only(
+                              left: 20, right: 20, top: 15),
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          height: 65,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: const Color(0xffEEEEEE),
+                            boxShadow: const [
+                              BoxShadow(
+                                  offset: Offset(0, 20),
+                                  blurRadius: 100,
+                                  color: Color(0xffEEEEEE)),
+                            ],
+                          ),
+                          child: TextFormField(
+                              obscureText: true,
+                              cursorColor: const Color(0xffF5591F),
+                              decoration: const InputDecoration(
+                                focusColor: Color(0xffF5591F),
+                                icon: Icon(
+                                  Icons.vpn_key,
+                                  color: Color(0xffF5591F),
+                                ),
+                                hintText: "Enter Password Again",
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                              ),
+                              validator: (value) {
+                                if (value != _passwordController.text) {
+                                  return 'Passwords do not match!';
+                                }
+                                if (value!.isEmpty) {
+                                  return 'required field';
+                                }
+                                return null;
+                              }),
+                        ),
+                      ],
+                    )),
+                GestureDetector(
+                  onTap: _submit,
+                  child: Container(
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.only(left: 20, right: 20, top: 15),
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    height: 54,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                          colors: [(Color(0xffF5591F)), Color(0xffF2861E)],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight),
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.grey[200],
+                      boxShadow: const [
+                        BoxShadow(
+                          offset: Offset(0, 10),
+                          blurRadius: 50,
+                          color: Color(0xffEEEEEE),
+                        ),
+                      ],
                     ),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  )
-                ],
-              ),
-            )
-          ],
+                    child: _isLoading
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : const Text(
+                            "REGISTER",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 10, bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Already a Member?  "),
+                      GestureDetector(
+                        child: const Text(
+                          "Login Now",
+                          style: TextStyle(color: Color(0xffF5591F)),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
