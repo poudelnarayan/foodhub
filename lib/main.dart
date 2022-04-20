@@ -3,22 +3,29 @@ import 'package:foodhub/helpers/custom_route.dart';
 import 'package:foodhub/provider/auth.dart';
 import 'package:foodhub/provider/cart.dart';
 import 'package:foodhub/provider/orders.dart';
-import 'package:foodhub/screens/auth_screen.dart';
+import 'package:foodhub/screens/auth/login_screen.dart';
+// import 'package:foodhub/screens/auth_screen.dart';
 import 'package:foodhub/screens/cart_screen.dart';
 import 'package:foodhub/screens/edit_food_screen.dart';
 import 'package:foodhub/screens/orders_screen.dart';
 import 'package:foodhub/screens/splash_screen.dart';
 import 'package:foodhub/screens/user_food_screen.dart';
+import 'package:foodhub/screens/profile_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'screens/food_overview_screen.dart';
 import 'screens/food_detail_screen.dart';
 import 'provider/foods.dart';
 
-void main() => runApp(const HaatBazaar());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(const FoodHub());
+}
 
-class HaatBazaar extends StatelessWidget {
-  const HaatBazaar({Key? key}) : super(key: key);
+class FoodHub extends StatelessWidget {
+  const FoodHub({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +65,7 @@ class HaatBazaar extends StatelessWidget {
                       authResultSnapshot.connectionState ==
                               ConnectionState.waiting
                           ? const SplashScreen()
-                          : const AuthScreen(),
+                          : const LoginScreen(),
                 ),
           theme: ThemeData(
             scaffoldBackgroundColor: Colors.grey[50],
@@ -79,6 +86,7 @@ class HaatBazaar extends StatelessWidget {
             OrdersScreen.routeName: (ctx) => const OrdersScreen(),
             UserFoodScreen.routeName: (ctx) => const UserFoodScreen(),
             EditProductScreen.routeName: (ctx) => const EditProductScreen(),
+            ProfileScreen.routeName: (ctx) => const ProfileScreen(),
           },
         ),
       ),

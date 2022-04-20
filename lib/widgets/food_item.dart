@@ -7,9 +7,12 @@ import '../screens/food_detail_screen.dart';
 import '../provider/food.dart';
 
 class FoodItem extends StatelessWidget {
-  const FoodItem({
+  FoodItem({
     Key? key,
+    required this.isProfile,
   }) : super(key: key);
+
+  bool isProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +35,7 @@ class FoodItem extends StatelessWidget {
                 tag: product.id!,
                 child: FadeInImage(
                   height: 250,
-                  placeholder:
-                      const AssetImage('assets/images/food.png'),
+                  placeholder: const AssetImage('assets/images/food.png'),
                   image: NetworkImage(product.imageUrl),
                   fit: BoxFit.cover,
                 ),
@@ -111,23 +113,24 @@ class FoodItem extends StatelessWidget {
                 ),
               ),
             ),
-            Positioned(
-              bottom: 5.0,
-              left: 5.0,
-              child: Consumer<Food>(
-                builder: (c, product, child) => IconButton(
-                  onPressed: () {
-                    product.toggleFavorite(authData.token!, authData.userId!);
-                  },
-                  icon: Icon(
-                    product.isFavorite
-                        ? Icons.favorite
-                        : Icons.favorite_outline,
-                    color: Theme.of(context).colorScheme.secondary,
+            if (!isProfile)
+              Positioned(
+                bottom: 5.0,
+                left: 5.0,
+                child: Consumer<Food>(
+                  builder: (c, product, child) => IconButton(
+                    onPressed: () {
+                      product.toggleFavorite(authData.token!, authData.userId!);
+                    },
+                    icon: Icon(
+                      product.isFavorite
+                          ? Icons.favorite
+                          : Icons.favorite_outline,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                   ),
                 ),
-              ),
-            )
+              )
           ],
         ),
       ),

@@ -16,7 +16,6 @@ class UserFoodScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final productData = Provider.of<Products>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Foods you added'),
@@ -40,16 +39,16 @@ class UserFoodScreen extends StatelessWidget {
                 : RefreshIndicator(
                     onRefresh: () => _refreshProducts(context),
                     child: Consumer<Foods>(
-                      builder: (ctx, productData, _) => Padding(
+                      builder: (ctx, foodData, _) => Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ListView.builder(
-                          itemCount: productData.items.length,
+                          itemCount: foodData.items.length,
                           itemBuilder: (_, i) => Column(
                             children: [
                               UserFoodList(
-                                id: productData.items[i].id!,
-                                imageUrl: productData.items[i].imageUrl,
-                                title: productData.items[i].title,
+                                id: foodData.items[i].id!,
+                                imageUrl: foodData.items[i].imageUrl,
+                                title: foodData.items[i].title,
                               ),
                               const Divider(),
                             ],

@@ -88,7 +88,7 @@ class _FoodOverviewScreenState extends State<FoodOverviewScreen> {
       drawer: const AppDrawer(),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : FoodsGrid(showFavourites: _showOnlyFavourites),
+          : FoodsGrid(showFavourites: _showOnlyFavourites,isProfileScreen: false,),
     );
   }
 }

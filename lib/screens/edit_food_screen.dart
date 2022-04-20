@@ -23,7 +23,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   // GLobal keys are mostly used with form where we want the state of a widget in another widget
   var _isLoading = false;
 
-  var _editedProduct = Food(
+  var _editedFood = Food(
       id: null,
       title: '',
       price: 0,
@@ -70,13 +70,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
       _isLoading = true;
     });
 
-    if (_editedProduct.id != null) {
+    if (_editedFood.id != null) {
       await Provider.of<Foods>(context, listen: false)
-          .updateProduct(_editedProduct.id!, _editedProduct);
+          .updateProduct(_editedFood.id!, _editedFood);
     } else {
       try {
         await Provider.of<Foods>(context, listen: false)
-            .addFood(_editedProduct);
+            .addFood(_editedFood);
       } catch (error) {
         await showDialog(
           // showDialog returns a Future
@@ -107,16 +107,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (_isInit) {
       final productId = ModalRoute.of(context)!.settings.arguments;
       if (productId != null) {
-        _editedProduct = Provider.of<Foods>(context, listen: false)
+        _editedFood = Provider.of<Foods>(context, listen: false)
             .findById(productId.toString());
         _initValues = {
-          'title': _editedProduct.title,
-          'description': _editedProduct.description,
-          'price': _editedProduct.price.toString(),
+          'title': _editedFood.title,
+          'description': _editedFood.description,
+          'price': _editedFood.price.toString(),
           'imageUrl': '',
-          'foodType': _editedProduct.foodType,
+          'foodType': _editedFood.foodType,
         };
-        _imageUrlController.text = _editedProduct.imageUrl;
+        _imageUrlController.text = _editedFood.imageUrl;
       }
     }
     _isInit = false;
@@ -158,13 +158,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         return null;
                       },
                       onSaved: (value) {
-                        _editedProduct = Food(
-                          id: _editedProduct.id,
-                          isFavorite: _editedProduct.isFavorite,
+                        _editedFood = Food(
+                          id: _editedFood.id,
+                          isFavorite: _editedFood.isFavorite,
                           title: value!,
-                          description: _editedProduct.description,
-                          price: _editedProduct.price,
-                          imageUrl: _editedProduct.imageUrl,
+                          description: _editedFood.description,
+                          price: _editedFood.price,
+                          imageUrl: _editedFood.imageUrl,
                           foodType: selectedValue,
                         );
                       },
@@ -175,13 +175,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.number,
                       onSaved: (value) {
-                        _editedProduct = Food(
-                          id: _editedProduct.id,
-                          isFavorite: _editedProduct.isFavorite,
-                          title: _editedProduct.title,
-                          description: _editedProduct.description,
+                        _editedFood = Food(
+                          id: _editedFood.id,
+                          isFavorite: _editedFood.isFavorite,
+                          title: _editedFood.title,
+                          description: _editedFood.description,
                           price: double.parse(value!),
-                          imageUrl: _editedProduct.imageUrl,
+                          imageUrl: _editedFood.imageUrl,
                           foodType: selectedValue,
                         );
                       },
@@ -205,13 +205,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           const InputDecoration(labelText: 'Description'),
                       keyboardType: TextInputType.multiline,
                       onSaved: (value) {
-                        _editedProduct = Food(
-                          id: _editedProduct.id,
-                          isFavorite: _editedProduct.isFavorite,
-                          title: _editedProduct.title,
+                        _editedFood = Food(
+                          id: _editedFood.id,
+                          isFavorite: _editedFood.isFavorite,
+                          title: _editedFood.title,
                           description: value!,
-                          price: _editedProduct.price,
-                          imageUrl: _editedProduct.imageUrl,
+                          price: _editedFood.price,
+                          imageUrl: _editedFood.imageUrl,
                           foodType: selectedValue,
                         );
                       },
@@ -275,12 +275,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                               return null;
                             },
                             onSaved: (value) {
-                              _editedProduct = Food(
-                                id: _editedProduct.id,
-                                isFavorite: _editedProduct.isFavorite,
-                                title: _editedProduct.title,
-                                description: _editedProduct.description,
-                                price: _editedProduct.price,
+                              _editedFood = Food(
+                                id: _editedFood.id,
+                                isFavorite: _editedFood.isFavorite,
+                                title: _editedFood.title,
+                                description: _editedFood.description,
+                                price: _editedFood.price,
                                 imageUrl: value!,
                                 foodType: selectedValue,
                               );
