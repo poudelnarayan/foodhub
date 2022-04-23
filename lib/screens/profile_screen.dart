@@ -1,20 +1,56 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
+
 import 'package:foodhub/widgets/foods_grid.dart';
 import 'package:foodhub/widgets/pickers/user_image_picker.dart';
 
 class ProfileScreen extends StatefulWidget {
   static const routeName = '/profile-screen';
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({Key? key, required this.currentUser}) : super(key: key);
+  final String currentUser;
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  DocumentSnapshot<Map<String, dynamic>>? snapshot;
+  final editNameController = TextEditingController();
+  String? url;
+  final _formKey = GlobalKey<FormState>();
+
+  void getData() async {
+    final data = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.currentUser)
+        .get();
+    setState(() {
+      snapshot = data;
+    });
+  }
+
+  void updateData() async {
+    Map<String, Object> data = {
+      'username': editNameController.text,
+    };
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.currentUser)
+        .update(data);
+  }
+
   File? _userImageFile;
   void _pickedImage(File image) {
     _userImageFile = image;
+  }
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
   }
 
   @override
@@ -22,6 +58,90 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Info'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    content: SizedBox(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // UserImagePicker(imagePickFn: _pickedImage),
+                          Form(
+                            key: _formKey,
+                            child: TextFormField(
+                              controller: editNameController,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Required field';
+                                }
+                                if (value.trim().length < 3) {
+                                  return 'Atleast four character required';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Cancel')),
+                      TextButton(
+                        onPressed: () async {
+                          if (!_formKey.currentState!.validate()) {
+                            return;
+                          }
+                          _formKey.currentState!.save();
+                          updateData();
+                          getData();
+                          // try {
+                          //   final ref = FirebaseStorage.instance
+                          //       .ref()
+                          //       .child('user_image')
+                          //       .child(
+                          //         widget.currentUser + '.jpg',
+                          //       );
+                          //   final result = await ref.putFile(_userImageFile!);
+                          //   String durl = await ref.getDownloadURL();
+                          //   setState(() {
+                          //     url = durl;
+                          //   });
+                          // } on PlatformException catch (error) {
+                          //   var message = 'An error occured,';
+                          //   if (error.message != null) {
+                          //     message = error.message!;
+                          //   }
+                          //   ScaffoldMessenger.of(context).showSnackBar(
+                          //     SnackBar(
+                          //       content: Text(message),
+                          //       backgroundColor: Theme.of(context).errorColor,
+                          //     ),
+                          //   );
+                          // } catch (error) {
+                          //   print(error);
+                          // }
+
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Save'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            icon: const Icon(Icons.edit),
+            tooltip: 'edit profile',
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -31,13 +151,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                UserImagePicker(imagePickFn: _pickedImage),
+                CircleAvatar(
+                  radius: 40,
+                  backgroundImage: url == null
+                      ? const AssetImage('assets/images/addimage.png')
+                      : null,
+                ),
                 const SizedBox(
                   width: 30,
                 ),
                 Column(
                   children: [
-                    Text('Your Name'),
+                    Text(
+                      snapshot?.data()?['username'].toString() ?? 'Loading..',
+                      style: const TextStyle(
+                        color: Colors.black87,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 )
               ],
@@ -56,7 +188,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             ),
-            FoodsGrid(
+            const FoodsGrid(
               showFavourites: true,
               isProfileScreen: true,
             ),

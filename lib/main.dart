@@ -6,13 +6,11 @@ import 'package:foodhub/provider/auth.dart';
 import 'package:foodhub/provider/cart.dart';
 import 'package:foodhub/provider/orders.dart';
 import 'package:foodhub/screens/auth/login_screen.dart';
-// import 'package:foodhub/screens/auth_screen.dart';
 import 'package:foodhub/screens/cart_screen.dart';
 import 'package:foodhub/screens/edit_food_screen.dart';
 import 'package:foodhub/screens/orders_screen.dart';
 import 'package:foodhub/screens/splash_screen.dart';
 import 'package:foodhub/screens/user_food_screen.dart';
-import 'package:foodhub/screens/profile_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -24,6 +22,8 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.deepOrange, // status bar color
   ));
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const FoodHub());
@@ -91,7 +91,6 @@ class FoodHub extends StatelessWidget {
             OrdersScreen.routeName: (ctx) => const OrdersScreen(),
             UserFoodScreen.routeName: (ctx) => const UserFoodScreen(),
             EditProductScreen.routeName: (ctx) => const EditProductScreen(),
-            ProfileScreen.routeName: (ctx) => const ProfileScreen(),
           },
         ),
       ),

@@ -11,6 +11,7 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String currentUser = Provider.of<Auth>(context).userId!;
     return Drawer(
       child: Column(
         children: [
@@ -24,7 +25,10 @@ class AppDrawer extends StatelessWidget {
                 child: IconButton(
                     onPressed: () {
                       Navigator.of(context).pop();
-                      Navigator.of(context).pushNamed(ProfileScreen.routeName);
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: ((context) =>
+                            ProfileScreen(currentUser: currentUser)),
+                      ));
                     },
                     icon: const Icon(Icons.person)),
               ),

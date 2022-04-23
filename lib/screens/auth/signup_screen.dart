@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodhub/models/http_exception.dart';
 import 'package:foodhub/provider/auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import '../../models/http_exception.dart';
 
@@ -55,8 +56,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
 
     try {
-      await Provider.of<Auth>(context, listen: false)
+      final authResult = await Provider.of<Auth>(context, listen: false)
           .signup(_authData['email']!, _authData['password']!);
+      await FirebaseFirestore.instance.collection('users').doc(authResult).set({
+        'username': _nameController.text,
+        'email': _authData['email']!,
+      });
+
       Navigator.of(context).pop();
     } on HttpException catch (error) {
       var errorMessage = 'Authentication failed';
