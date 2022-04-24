@@ -1,9 +1,9 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:foodhub/provider/cart.dart';
 import 'package:foodhub/provider/foods.dart';
 import 'package:foodhub/screens/cart_screen.dart';
 import 'package:foodhub/widgets/app_drawer.dart';
-import 'package:foodhub/widgets/carousel_slider.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/foods_grid.dart';
@@ -22,8 +22,10 @@ class FoodOverviewScreen extends StatefulWidget {
 }
 
 class _FoodOverviewScreenState extends State<FoodOverviewScreen> {
+  final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
   var _showOnlyFavourites = false;
   var _isLoading = false;
+  int _page = 0;
 
   @override
   void initState() {
@@ -88,7 +90,42 @@ class _FoodOverviewScreenState extends State<FoodOverviewScreen> {
       drawer: const AppDrawer(),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : FoodsGrid(showFavourites: _showOnlyFavourites,isProfileScreen: false,),
+          : FoodsGrid(
+              showFavourites: _showOnlyFavourites,
+              isProfileScreen: false,
+            ),
+      bottomNavigationBar: _isLoading
+          ? null
+          : CurvedNavigationBar(
+              index: 1,
+              height: 60,
+              key: _bottomNavigationKey,
+              items: const [
+                Icon(
+                  Icons.add,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                Icon(
+                  Icons.home,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                Icon(
+                  Icons.settings,
+                  size: 30,
+                  color: Colors.white,
+                ),
+              ],
+              animationDuration: const Duration(milliseconds: 500),
+              backgroundColor: Colors.white,
+              color: Theme.of(context).colorScheme.secondary,
+              onTap: (index) {
+                setState(() {
+                  _page = index;
+                });
+              },
+            ),
     );
   }
 }

@@ -43,7 +43,7 @@ class FoodsGrid extends StatelessWidget {
           // * WhenEver we use a existing object it is recommended to use .value
           //* If provider value doesnot depends on context
           value: products[i],
-          child: FoodItem(isProfile:isProfileScreen),
+          child: FoodItem(isProfile: isProfileScreen),
           //! This method must be  used on builder function (listView.builder or GridView.builder)
         ),
       );
@@ -58,16 +58,25 @@ class FoodsGrid extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 10.0),
-                  child: Text(
-                    'Browse More',
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: showFavourites
+                      ? const Text(
+                          'Your Favourites',
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : const Text(
+                          'Browse More',
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                 ),
                 _buildGridView(),
               ],

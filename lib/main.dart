@@ -76,7 +76,7 @@ class FoodHub extends StatelessWidget {
             scaffoldBackgroundColor: Colors.grey[50],
             colorScheme:
                 ColorScheme.fromSwatch(primarySwatch: Colors.deepOrange)
-                    .copyWith(secondary: Colors.deepOrange),
+                    .copyWith(secondary: Color.fromARGB(255, 240, 119, 82)),
             fontFamily: 'Lato',
             pageTransitionsTheme: PageTransitionsTheme(
               builders: {
