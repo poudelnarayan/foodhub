@@ -74,6 +74,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             key: _formKey,
                             child: TextFormField(
                               controller: editNameController,
+                              decoration: const InputDecoration(
+                                  label: Text('Enter name')),
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Required field';

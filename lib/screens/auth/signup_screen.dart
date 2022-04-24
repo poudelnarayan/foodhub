@@ -209,9 +209,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                             keyboardType: TextInputType.emailAddress,
                             validator: (value) {
-                              if (value!.isEmpty ||
-                                  !value.endsWith('@heraldcollege.edu.np')) {
-                                return 'must ends with :@heraldcollege.edu.np';
+                              // if (value!.isEmpty ||
+                              //     !value.endsWith('@heraldcollege.edu.np')) {
+                              //   return 'must ends with :@heraldcollege.edu.np';
+                              // } else {
+                              //   return null;
+                              // }
+                              if (value!.isEmpty || !value.contains('@')) {
+                                return 'not a valid email';
                               } else {
                                 return null;
                               }
