@@ -118,7 +118,7 @@ class Foods extends ChangeNotifier {
 
   Future<void> deleteProduct(String id) async {
     final url = Uri.parse(
-        'https://foodhub-fe616-default-rtdb.firebaseio.com/foods/$id?auth=$authToken');
+        'https://foodhub-fe616-default-rtdb.firebaseio.com/foods/$id.json?auth=$authToken');
     final existingFoodIndex = _items.indexWhere((food) => food.id == id);
     Food? existingFood = _items[existingFoodIndex];
     _items.removeAt(existingFoodIndex);
@@ -130,6 +130,7 @@ class Foods extends ChangeNotifier {
     if (response.statusCode >= 400) {
       _items.insert(existingFoodIndex, existingFood);
       notifyListeners();
+      print(response.body);
       throw HttpException(message: 'Could not delete product.');
     }
     existingFood = null;

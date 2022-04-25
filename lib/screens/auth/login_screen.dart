@@ -156,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         margin: const EdgeInsets.only(top: 50),
                         child: const CircleAvatar(
                           radius: 50.0,
-                          backgroundImage: AssetImage("assets/images/logo.jpg"),
+                          backgroundImage: AssetImage("assets/images/icon.png"),
                         ),
                       ),
                       Container(

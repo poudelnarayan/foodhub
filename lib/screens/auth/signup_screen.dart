@@ -14,6 +14,7 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
+  // ignore: prefer_final_fields
   Map<String, String> _authData = {
     'email': '',
     'password': '',
@@ -119,7 +120,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           child: const CircleAvatar(
                             radius: 50.0,
                             backgroundImage:
-                                AssetImage("assets/images/logo.jpg"),
+                                AssetImage("assets/images/icon.png"),
                           ),
                         ),
                         Container(
