@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:foodhub/provider/cart.dart';
 import 'package:foodhub/provider/foods.dart';
 import 'package:foodhub/screens/cart_screen.dart';
+import 'package:foodhub/widgets/profile.dart';
 import 'package:foodhub/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
 
+import '../provider/auth.dart';
 import '../widgets/foods_grid.dart';
 import '../widgets/badge.dart';
 
@@ -25,7 +27,65 @@ class _FoodOverviewScreenState extends State<FoodOverviewScreen> {
   final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
   var _showOnlyFavourites = false;
   var _isLoading = false;
-  int _page = 0;
+  int _page = 1;
+
+  Widget _listTileBuilder(
+      IconData leadingIcon, String text, Function onTapHandeler) {
+    return GestureDetector(
+      onTap: () {
+        onTapHandeler;
+      },
+      child: ListTile(
+        leading: Icon(leadingIcon),
+        title: Text(text),
+      ),
+    );
+  }
+
+  Widget _settingPage() {
+    return Container(
+      padding: const EdgeInsets.all(15),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _listTileBuilder(Icons.info, 'About FoodHub', () {}),
+              const Divider(),
+              _listTileBuilder(Icons.feedback_outlined, 'Feedback', () {}),
+              const Divider(),
+              _listTileBuilder(Icons.feed, 'Terms and condition', () {}),
+              const Divider(),
+              _listTileBuilder(
+                  Icons.privacy_tip_outlined, 'Privacy Policy', () {}),
+              const Divider(),
+              _listTileBuilder(Icons.question_answer, 'FAQs', () {}),
+              const Divider(),
+            ],
+          ),
+          Container(
+            padding: const EdgeInsets.only(bottom: 70),
+            child: Column(
+              children: const [
+                Text(
+                  'Version 1.0 © FoodHub Pvt.Ltd',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  'Made with ♥ by Prajwol ',
+                  style: TextStyle(color: Colors.grey),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -40,35 +100,38 @@ class _FoodOverviewScreenState extends State<FoodOverviewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final String currentUser = Provider.of<Auth>(context).userId!;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('FoodHub'),
         centerTitle: true,
         actions: [
-          PopupMenuButton(
-            onSelected: (FilterOptions selectedValue) {
-              setState(() {
-                if (selectedValue == FilterOptions.favourites) {
-                  _showOnlyFavourites = true;
-                } else {
-                  _showOnlyFavourites = false;
-                }
-              });
-            },
-            child: const Icon(
-              Icons.more_vert,
+          if (_page == 1)
+            PopupMenuButton(
+              onSelected: (FilterOptions selectedValue) {
+                setState(() {
+                  if (selectedValue == FilterOptions.favourites) {
+                    _showOnlyFavourites = true;
+                  } else {
+                    _showOnlyFavourites = false;
+                  }
+                });
+              },
+              child: const Icon(
+                Icons.more_vert,
+              ),
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                  child: Text('Only Favourites'),
+                  value: FilterOptions.favourites,
+                ),
+                const PopupMenuItem(
+                  child: Text('Show All'),
+                  value: FilterOptions.all,
+                ),
+              ],
             ),
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                child: Text('Only Favourites'),
-                value: FilterOptions.favourites,
-              ),
-              const PopupMenuItem(
-                child: Text('Show All'),
-                value: FilterOptions.all,
-              ),
-            ],
-          ),
           const SizedBox(
             width: 10,
           ),
@@ -90,9 +153,17 @@ class _FoodOverviewScreenState extends State<FoodOverviewScreen> {
       drawer: const AppDrawer(),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : FoodsGrid(
-              showFavourites: _showOnlyFavourites,
-              isProfileScreen: false,
+          : Container(
+              child: _page == 1
+                  ? FoodsGrid(
+                      showFavourites: _showOnlyFavourites,
+                      isProfileScreen: false,
+                    )
+                  : Container(
+                      child: _page == 0
+                          ? UserProfile(currentUser: currentUser)
+                          : _settingPage(),
+                    ),
             ),
       bottomNavigationBar: _isLoading
           ? null
@@ -102,7 +173,7 @@ class _FoodOverviewScreenState extends State<FoodOverviewScreen> {
               key: _bottomNavigationKey,
               items: const [
                 Icon(
-                  Icons.add,
+                  Icons.person,
                   size: 30,
                   color: Colors.white,
                 ),
@@ -121,9 +192,11 @@ class _FoodOverviewScreenState extends State<FoodOverviewScreen> {
               backgroundColor: Colors.white,
               color: Theme.of(context).colorScheme.secondary,
               onTap: (index) {
-                setState(() {
-                  _page = index;
-                });
+                setState(
+                  () {
+                    _page = index;
+                  },
+                );
               },
             ),
     );

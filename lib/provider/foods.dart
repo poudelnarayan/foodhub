@@ -61,7 +61,6 @@ class Foods extends ChangeNotifier {
   }
 
   Future<void> addFood(Food food) async {
-    // Using async automatically wrap our code with Future, so we not need to return
     final url = Uri.parse(
         'https://foodhub-fe616-default-rtdb.firebaseio.com/foods.json?auth=$authToken');
 

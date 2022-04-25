@@ -41,7 +41,7 @@ class FoodDetailScreen extends StatelessWidget {
                 height: 50,
               ),
               Text(
-                '\$${loadedProduct.price}',
+                'Rs.${loadedProduct.price}',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: Colors.grey,
@@ -59,11 +59,6 @@ class FoodDetailScreen extends StatelessWidget {
                   softWrap: true,
                 ),
               ),
-              const SizedBox(
-                height: 750,
-                // Just to make the product-detail screen scrollable so that we can test the beautiful animation
-                // between appBar and Image
-              )
             ]),
           ),
         ],

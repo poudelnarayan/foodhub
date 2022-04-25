@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:foodhub/helpers/custom_route.dart';
 import 'package:foodhub/provider/auth.dart';
 import 'package:foodhub/screens/orders_screen.dart';
-import 'package:foodhub/screens/profile_screen.dart';
 import 'package:foodhub/screens/user_food_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +10,6 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String currentUser = Provider.of<Auth>(context).userId!;
     return Drawer(
       child: Column(
         children: [
@@ -19,20 +17,6 @@ class AppDrawer extends StatelessWidget {
             title: const Text('Menu'),
             centerTitle: true,
             automaticallyImplyLeading: false,
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 15),
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: ((context) =>
-                            ProfileScreen(currentUser: currentUser)),
-                      ));
-                    },
-                    icon: const Icon(Icons.person)),
-              ),
-            ],
           ),
           const Divider(),
           ListTile(
